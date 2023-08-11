@@ -4,32 +4,32 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import GradientBoostingRegressor
 import numpy as np
 
-# Read the Pitha_Dataset.csv file
+
 dataset_file_path = '/content/drive/My Drive/av/Pitha_Dataset.csv'
 dataset = pd.read_csv(dataset_file_path)
 
-# Specify the input feature column names
+
 input_feature_columns = ['AverageHeartRate', 'CumulativeSteps', 'ActiveDistance', 'LightActiveDistance', 'MinutesAsleep', 'Calories']
 
-# Extract the input features (X) and target variable (y)
+
 X = dataset[input_feature_columns]
 y = dataset['Pitha_Score']
 
-# Split the dataset into training and testing sets
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Standardize the input features
+
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
 
-# Create the Gradient Boosting model
+
 model = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=3, random_state=42)
 
-# Train the model
+
 model.fit(X_train_scaled, y_train)
 
-# Allow the user to input parameter values
+
 print("Please enter the following information for prediction:")
 new_input_values = {}
 for column in input_feature_columns:
@@ -37,10 +37,10 @@ for column in input_feature_columns:
 new_input_df = pd.DataFrame([new_input_values])
 new_input_df_scaled = scaler.transform(new_input_df)
 
-# Predict Pitha score for the new input values using the model
+
 predicted_pitha_score = model.predict(new_input_df_scaled)
 
-# Determine the category of Pitha Dosha based on the predicted score
+
 def get_pitha_category(pitha_score):
     if pitha_score <= 5:
         return "No to Light Pitha"
@@ -49,7 +49,7 @@ def get_pitha_category(pitha_score):
     else:
         return "Extreme Pitha"
 
-# Define nutrition advice based on the predicted Pitha category
+
 def get_nutrition_advice(pitha_category):
     nutrition_advice = {
         "No to Light Pitha": '''
@@ -92,7 +92,7 @@ def get_nutrition_advice(pitha_category):
     }
     return nutrition_advice[pitha_category]
 
-# Print the predicted Pitha category and nutrition advice
+
 predicted_pitha_category = get_pitha_category(predicted_pitha_score[0])
 print("Predicted Pitha Category:", predicted_pitha_category)
 print("Nutrition Advice:")
